@@ -164,6 +164,22 @@ eq(a, [ 'a', 'A',            3, 4, 5,   6,    8, 9 ]);
 eq(b, [ 'b', 'B',            3, 4, 5,      7, 8, 9 ]);
 
 
+tmp = { offsetA: 2, offsetB: 2, keep: 1 };
+a = Buffer.from('snow☃man');
+b = toCharCodes('snow☃man');
+eq(gcp(a, b, tmp.offsetA, tmp.offsetB),   Buffer.from('ow'));
+eq(gcp(b, a, tmp.offsetA, tmp.offsetB),   toCharCodes('ow'));
+tmp = gcp.strip(a, b, tmp.offsetA, tmp.offsetB, tmp.keep);
+eq(tmp.length, 1);
+eq(tmp.c(), Buffer.from('o'));
+eq(tmp.a(), Buffer.from('snw☃man'));  // the "o" has been stripped
+eq(tmp.b(), toCharCodes('snw☃man'));  // why not the "w☃ma"? (keep 1 = "n")
+eq(tmp.a().length, 9);
+eq(tmp.b().length, 7);
+eq(tmp.a().slice(2, -2), Buffer.from([ 0x77, 0xE2, 0x98, 0x83, 0x6D ]));
+eq(tmp.b().slice(2, -2),             [ 0x77,      0x2603,      0x6D ]);
+
+
 
 
 

@@ -1,5 +1,5 @@
 { "name": "generic-common-prefix",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Find a common prefix between two Array-like containers (arrays, strings, buffers, arguments), measure its length, slice it, strip it. Also concat two containers.",
   "keywords": [
     "arguments",

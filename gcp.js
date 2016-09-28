@@ -67,7 +67,7 @@ module.exports = (function setup() {
     return { length: cpLen,
       a: gcp.slices.bind(a, [ offsetA && [0, offsetA], [offsetA + cpLen] ]),
       b: gcp.slices.bind(b, [ offsetB && [0, offsetB], [offsetB + cpLen] ]),
-      c: a.slice.bind(a, offsetA, cpLen) };
+      c: a.slice.bind(a, offsetA, offsetA + cpLen) };
   };
 
 
