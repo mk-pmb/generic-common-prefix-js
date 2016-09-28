@@ -1,0 +1,46 @@
+{ "name": "generic-common-prefix",
+  "version": "0.1.0",
+  "description": "Find a common prefix between two Array-like containers (arrays, strings, buffers, arguments), measure its length, slice it, strip it. Also concat two containers.",
+  "keywords": [
+    "arguments",
+    "array",
+    "arrays",
+    "buffer",
+    "buffers",
+    "common prefix",
+    "common prefixes",
+    "concat",
+    "container",
+    "containers",
+    "length",
+    "measure",
+    "prefix",
+    "prefixes",
+    "slice",
+    "string",
+    "strings",
+    "strip"
+  ],
+
+  "author": "M.K. (https://github.com/mk-pmb)",
+  "homepage": "https://github.com/mk-pmb/generic-common-prefix-js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mk-pmb/generic-common-prefix-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mk-pmb/generic-common-prefix-js/issues"
+  },
+
+  "private": false, "license": "ISC",
+
+  "main": "gcp.js",
+  "scripts": { "test": "nodejs test.js" },
+  "directories": {
+    "doc": "doc",
+    "test": "test"
+  },
+
+
+  "npm vs. BOM = Unexpected token": "-*- coding: UTF-8 -*-"
+}
