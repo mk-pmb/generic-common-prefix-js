@@ -26,33 +26,56 @@ var gcp = require('generic-common-prefix'), assert = require('assert'),
   eq = assert.deepStrictEqual, a, b, tmp;
 
 
-eq(gcp('watercraft', ''), '');
-eq(gcp('watercraft', 'waterfall'), 'water');
-eq(gcp('watercraft', 'what a craft'), 'w');
-eq(gcp('watercraft', 'what a raft!', 6, 7), 'raft');
+a = 'watercraft';
+b = '';
+eq(gcp(a, b),           '');
+eq(gcp.measure(a, b),   0);
 
 
-a = ['bacon', 'lettuce', 'tomato'];
-b = ['bacon', 'sandwich'];
-eq(gcp(a, b), ['bacon']);
+a = 'watercraft';
+b = 'waterfall';
+eq(gcp(a, b),           'water');
+eq(gcp.measure(a, b),   5);
 
 
-a = [          'bacon', 'lettuce', 'tomato'];
-b = ['tomato', 'bacon', 'lettuce', 'sandwich'];
-eq(gcp(a, b, 0, 1), ['bacon', 'lettuce']);
+a = 'watercraft';
+b = 'what a raft!';
+eq(gcp(a, b),           'w');
+eq(gcp.measure(a, b),   1);
+
+tmp = { offsetA: 6, offsetB: 7 };
+a =   'watercraft';
+b = 'what a raft!';
+eq(gcp(a, b, tmp.offsetA, tmp.offsetB),           'raft');
+eq(gcp.measure(a, b, tmp.offsetA, tmp.offsetB),   4);
 
 
-a = ['bacon',   'lettuce', 'tomato'];
-b = ['chicken', 'lettuce', 'tomato', 'cheese'];
+a = [ 'bacon', 'lettuce', 'tomato' ];
+b = [ 'bacon', 'sandwich' ];
+eq(gcp(a, b),
+    [ 'bacon' ]);
+
+
+tmp = { offsetA: 0, offsetB: 1 };
+a = [           'bacon', 'lettuce', 'tomato'   ];
+b = [ 'tomato', 'bacon', 'lettuce', 'sandwich' ];
+eq(gcp(a, b, tmp.offsetA, tmp.offsetB),
+    [           'bacon', 'lettuce'             ]);
+
+
+a = [ 'bacon',   'lettuce', 'tomato' ];
+b = [ 'chicken', 'lettuce', 'tomato', 'cheese' ];
 eq(gcp.strip(a, b), []);
 eq([a.length, b.length], [3, 4]);
 
 
-a = ['bacon',   'lettuce', 'tomato'];
-b = ['chicken', 'lettuce', 'tomato', 'cheese'];
-eq(gcp.strip(a, b, 1, 1), ['lettuce', 'tomato']);
-eq(a, ['bacon']);
-eq(b, ['chicken', 'cheese']);
+tmp = { offsetA: 1, offsetB: 1 };
+a =   [ 'bacon',   'lettuce', 'tomato'           ];
+b =   [ 'chicken', 'lettuce', 'tomato', 'cheese' ];
+eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB),
+      [            'lettuce', 'tomato'           ]);
+eq(a, [ 'bacon'                                  ]);
+eq(b, [ 'chicken',                      'cheese' ]);
 
 
 a = Buffer.from([0xC1, 0xC2, 0xA3]);
@@ -62,14 +85,9 @@ eq(gcp(a, b), Buffer.from([0xC1, 0xC2]));
 
 a = Buffer.from('watercraft');
 b = 'waterfall';
-eq(gcp(a, b), Buffer.from(''));
-
-
-a = Buffer.from('watercraft');
-b = 'waterfall';
 eq(gcp(a, b), Buffer.from(''));   // why? types inside containers.
 eq([ a[0], b[0] ], [ 119, 'w' ]);
-eq(type0f(a[0], b[0]), ['number', 'string']);
+eq(type0f(a[0], b[0]), [ 'number', 'string' ]);
 
 
 a = Buffer.from('watercraft');
@@ -83,9 +101,9 @@ b = toCharCodes('snow☃man');
 eq(gcp(a, b), Buffer.from([ 0x73, 0x6e, 0x6f, 0x77 ]));
 eq(gcp(b, a),             [ 0x73, 0x6e, 0x6f, 0x77 ]);
 tmp = gcp.strip(a, b);
-eq(Object.keys(tmp).sort(), ['a', 'b', 'c', 'length']);
+eq(Object.keys(tmp).sort(), [ 'a', 'b', 'c', 'length' ]);
 eq(tmp.length, 4);
-eq(type0f(tmp.a, tmp.b, tmp.c), ['function', 'function', 'function']);
+eq(type0f(tmp.a, tmp.b, tmp.c), [ 'function', 'function', 'function' ]);
 eq(tmp.a(), Buffer.from([ 0xE2, 0x98, 0x83, 0x6D, 0x61, 0x6E ]));
 eq(tmp.b(),             [      0x2603,      0x6D, 0x61, 0x6E ]);
 eq(tmp.c(), Buffer.from('snow'));
