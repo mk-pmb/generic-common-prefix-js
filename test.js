@@ -2,6 +2,9 @@
 /* -*- tab-width: 2 -*- */
 'use strict';
 
+//########## BEGIN helper funcs ##############################\\
+// scroll down ~30 lines for tests.
+
 function toChars(s) { return String(s).split(''); }
 function toCharCodes(s) { return toChars(s).map(toCharCodes.at0); }
 toCharCodes.at0 = function (s) { return s.charCodeAt(0); };
@@ -22,8 +25,11 @@ function type0f(x) {
 
 function toFuncArgs() { return arguments; }
 
+//########## ENDOF helper funcs ##############################\\
+
+
 var gcp = require('generic-common-prefix'), assert = require('assert'),
-  eq = assert.deepStrictEqual, a, b, tmp;
+  eq = assert.deepStrictEqual, a, b, opt, tmp;
 
 
 a = 'watercraft';
@@ -43,11 +49,11 @@ b = 'what a raft!';
 eq(gcp(a, b),           'w');
 eq(gcp.measure(a, b),   1);
 
-tmp = { offsetA: 6, offsetB: 7 };
-a =   'watercraft';
+opt = { offsetA: 6, offsetB: 7 };
+a =  'watercraft';
 b = 'what a raft!';
-eq(gcp(a, b, tmp.offsetA, tmp.offsetB),           'raft');
-eq(gcp.measure(a, b, tmp.offsetA, tmp.offsetB),   4);
+eq(gcp(a, b, opt.offsetA, opt.offsetB),           'raft');
+eq(gcp.measure(a, b, opt.offsetA, opt.offsetB),   4);
 
 
 a = [ 'bacon', 'lettuce', 'tomato' ];
@@ -56,10 +62,10 @@ eq(gcp(a, b),
     [ 'bacon' ]);
 
 
-tmp = { offsetA: 0, offsetB: 1 };
+opt = { offsetA: 0, offsetB: 1 };
 a = [           'bacon', 'lettuce', 'tomato'   ];
 b = [ 'tomato', 'bacon', 'lettuce', 'sandwich' ];
-eq(gcp(a, b, tmp.offsetA, tmp.offsetB),
+eq(gcp(a, b, opt.offsetA, opt.offsetB),
     [           'bacon', 'lettuce'             ]);
 
 
@@ -69,10 +75,10 @@ eq(gcp.strip(a, b), []);
 eq([a.length, b.length], [3, 4]);
 
 
-tmp = { offsetA: 1, offsetB: 1 };
+opt = { offsetA: 1, offsetB: 1 };
 a =   [ 'bacon',   'lettuce', 'tomato'           ];
 b =   [ 'chicken', 'lettuce', 'tomato', 'cheese' ];
-eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB),
+eq(gcp.strip(a, b, opt.offsetA, opt.offsetB),
       [            'lettuce', 'tomato'           ]);
 eq(a, [ 'bacon'                                  ]);
 eq(b, [ 'chicken',                      'cheese' ]);
@@ -111,65 +117,65 @@ eq(tmp.c(), Buffer.from('snow'));
 
 a = 'watercraft';
 b = toFuncArgs('w', 'a', 't', 'e', 'r', 'f', 'a', 'l', 'l');
-eq(b.length, 9);
-eq(b.slice, undefined);
-eq(b.splice, undefined);
-eq(b.concat, undefined);
+eq(b.length,  9);
+eq(b.slice,   undefined);
+eq(b.splice,  undefined);
+eq(b.concat,  undefined);
 eq(gcp(a, b), 'water');
 eq(gcp(b, a), [ 'w', 'a', 't', 'e', 'r' ]);
 
 
-tmp = { offsetA: 0, offsetB: 0 };
+opt = { offsetA: 0, offsetB: 0 };
 a =   [ 0, 1, 2, 3, 4, 'a', 'A', ];
 b =   [ 0, 1, 2, 3, 4, 'b', 'B', ];
-eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB),
+eq(gcp.strip(a, b, opt.offsetA, opt.offsetB),
       [ 0, 1, 2, 3, 4 ]);
 eq(a, [                'a', 'A' ]);
 eq(b, [                'b', 'B' ]);
 
 
-tmp = { offsetA: 1, offsetB: 1 };
+opt = { offsetA: 1, offsetB: 1 };
 a =   [ 0, 1, 2, 3, 4, 'a', 'A', ];
 b =   [ 0, 1, 2, 3, 4, 'b', 'B', ];
-eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB),
+eq(gcp.strip(a, b, opt.offsetA, opt.offsetB),
       [    1, 2, 3, 4 ]);
 eq(a, [ 0,             'a', 'A' ]);
 eq(b, [ 0,             'b', 'B' ]);
 
 
-tmp = { offsetA: 1, offsetB: 1 };
+opt = { offsetA: 1, offsetB: 1 };
 a =   [ 0, 1, 2, 3, 4, 'a', 'A', ];
 b =   [    1, 2, 3, 4, 'b', 'B', ];
-eq([ a[tmp.offsetA], b[tmp.offsetB] ], [ 1, 2 ]);   // no common prefix
-eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB),
+eq([ a[opt.offsetA], b[opt.offsetB] ], [ 1, 2 ]);   // no common prefix
+eq(gcp.strip(a, b, opt.offsetA, opt.offsetB),
       []);
 
 
-tmp = { offsetA: 2, offsetB: 1 };
+opt = { offsetA: 2, offsetB: 1 };
 a =   [ 0, 1, 2, 3, 4, 'a', 'A', ];
 b =   [    1, 2, 3, 4, 'b', 'B', ];
-eq([ a[tmp.offsetA], b[tmp.offsetB] ], [ 2, 2 ]);   // yup
-eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB),
+eq([ a[opt.offsetA], b[opt.offsetB] ], [ 2, 2 ]);   // yup
+eq(gcp.strip(a, b, opt.offsetA, opt.offsetB),
       [       2, 3, 4]);
 eq(a, [ 0, 1,          'a', 'A' ]);
 eq(b, [    1,          'b', 'B' ]);
 
 
-tmp = { offsetA: 2, offsetB: 2, keep: 3 };
+opt = { offsetA: 2, offsetB: 2, keep: 3 };
 a =   [ 'a', 'A', 0, 1, 2,   3, 4, 5,   6,    8, 9 ];
 b =   [ 'b', 'B', 0, 1, 2,   3, 4, 5,      7, 8, 9 ];
-eq(gcp.strip(a, b, tmp.offsetA, tmp.offsetB, tmp.keep),
+eq(gcp.strip(a, b, opt.offsetA, opt.offsetB, opt.keep),
       [           0, 1, 2]); // v-- the 3 kept values
 eq(a, [ 'a', 'A',            3, 4, 5,   6,    8, 9 ]);
 eq(b, [ 'b', 'B',            3, 4, 5,      7, 8, 9 ]);
 
 
-tmp = { offsetA: 2, offsetB: 2, keep: 1 };
+opt = { offsetA: 2, offsetB: 2, keep: 1 };
 a = Buffer.from('snow☃man');
 b = toCharCodes('snow☃man');
-eq(gcp(a, b, tmp.offsetA, tmp.offsetB),   Buffer.from('ow'));
-eq(gcp(b, a, tmp.offsetA, tmp.offsetB),   toCharCodes('ow'));
-tmp = gcp.strip(a, b, tmp.offsetA, tmp.offsetB, tmp.keep);
+eq(gcp(a, b, opt.offsetA, opt.offsetB),   Buffer.from('ow'));
+eq(gcp(b, a, opt.offsetA, opt.offsetB),   toCharCodes('ow'));
+tmp = gcp.strip(a, b, opt.offsetA, opt.offsetB, opt.keep);
 eq(tmp.length, 1);
 eq(tmp.c(), Buffer.from('o'));
 eq(tmp.a(), Buffer.from('snw☃man'));  // the "o" has been stripped
