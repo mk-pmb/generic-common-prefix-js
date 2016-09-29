@@ -174,7 +174,7 @@ opt = { offsetA: 2, offsetB: 2, keep: 1 };
 a = Buffer.from('snow☃man');
 b = toCharCodes('snow☃man');
 eq(gcp(a, b, opt.offsetA, opt.offsetB),   Buffer.from('ow'));
-eq(gcp(b, a, opt.offsetA, opt.offsetB),   toCharCodes('ow'));
+eq(gcp(b, a, opt.offsetB, opt.offsetA),   toCharCodes('ow'));
 tmp = gcp.strip(a, b, opt.offsetA, opt.offsetB, opt.keep);
 eq(tmp.length, 1);
 eq(tmp.c(), Buffer.from('o'));
